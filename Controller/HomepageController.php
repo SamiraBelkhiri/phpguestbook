@@ -1,41 +1,27 @@
 <?php
 declare(strict_types=1);
 
-$myFile = "data.json";
-$arr_data = array(); // create empty array
-
-try
+class HomepageController
 {
-    //Get form data
-    $formdata = array(
-        'firstName'=> $_POST['firstName'],
-        'lastName'=> $_POST['lastName'],
-        'email'=>$_POST['email'],
-        'mobile'=> $_POST['mobile']
-    );
+    public function render(array $post)
+    {
 
-    //Get data from existing json file
-    $jsondata = file_get_contents($myFile);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $Name = $post['Name'];
+            $Title = $post['Title'];
+            $Message = $post['Message'];
+            $Date = date('d/m/y');
 
-    // converts json data into array
-    $arr_data = json_decode($jsondata, true);
+            $user = new Post($Title, $Name, $Message, $Date);
 
-    // Push user data to array
-    array_push($arr_data,$formdata);
+            $guests = new Guestbook(); // make an object off guestbook
+            $guests->pushDataJson($user);
+            // array_push($allData, $Name);
+            //echo("Thank you for your feedback");
+            //$user->getName();
+        }
 
-    //Convert updated array to JSON
-    $jsondata = json_encode($arr_data, JSON_PRETTY_PRINT);
-
-    //write json data into data.json file
-    if(file_put_contents($myFile, $jsondata)) {
-        echo 'Data successfully saved';
+        require 'View/homePage.php';
     }
-    else
-        echo "error";
 
 }
-catch (Exception $e) {
-    echo 'Caught exception: ',  $e->getMessage(), "\n";
-}
-
-?>
