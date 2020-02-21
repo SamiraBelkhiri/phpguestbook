@@ -23,7 +23,7 @@ class Guestbook
         );
 
         // Push user data to array
-        array_push($arr_data, $formdata);
+        array_unshift($arr_data, $formdata);
 
         //Convert updated array to JSON
         $jsondata = json_encode($arr_data, JSON_PRETTY_PRINT);
